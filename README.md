@@ -28,13 +28,12 @@ Please:
 - **Do not use in production**
 - **Do not use a Ledger device with funds for development purposes.**
 - **Have a separate and marked device that is used ONLY for development and testing**
-# Pendulum 1.1.x
+# Pendulum 2.2.x
 
 ## System
 
 | Name                    | Nano S | Nano S XL | Nano SP/X | Nesting | Arguments                         |
 | ----------------------- | ------ | --------- | --------- | ------- | --------------------------------- |
-| Fill block              |        |           |           |         | `Perbill`ratio<br/>               |
 | Remark                  |        |           |           |         | `Bytes`remark<br/>                |
 | Set heap pages          |        |           |           |         | `u64`pages<br/>                   |
 | Set code                |        |           |           |         | `Vecu8`code<br/>                  |
@@ -284,6 +283,7 @@ Please:
 | Batch all     |        |           |           |         | `VecCall`calls<br/>                             |
 | Dispatch as   |        |           |           |         | `BoxPalletsOrigin`as_origin<br/>`Call`call<br/> |
 | Force batch   |        |           |           |         | `VecCall`calls<br/>                             |
+| With weight   |        |           |           |         | `Call`call<br/>`Weight`weight<br/>              |
 
 ## Currencies
 
@@ -313,3 +313,9 @@ Please:
 | Transfer multiasset with fee |        |           |           |         | `BoxVersionedMultiAsset`asset<br/>`BoxVersionedMultiAsset`fee<br/>`BoxVersionedMultiLocation`dest<br/>`WeightLimit`dest_weight_limit<br/> |
 | Transfer multicurrencies     |        |           |           |         | `VecTupleCurrencyIdBalance`currencies<br/>`u32`fee_item<br/>`BoxVersionedMultiLocation`dest<br/>`WeightLimit`dest_weight_limit<br/>       |
 | Transfer multiassets         |        |           |           |         | `BoxVersionedMultiAssets`assets<br/>`u32`fee_item<br/>`BoxVersionedMultiLocation`dest<br/>`WeightLimit`dest_weight_limit<br/>             |
+
+## VestingManager
+
+| Name                    | Nano S | Nano S XL | Nano SP/X | Nesting | Arguments                                            |
+| ----------------------- | ------ | --------- | --------- | ------- | ---------------------------------------------------- |
+| Remove vesting schedule |        |           |           |         | `AccountIdLookupOfT`who<br/>`u32`schedule_index<br/> |
