@@ -28,7 +28,7 @@ Please:
 - **Do not use in production**
 - **Do not use a Ledger device with funds for development purposes.**
 - **Have a separate and marked device that is used ONLY for development and testing**
-# Pendulum 2.2.x
+# Pendulum 4.4.x
 
 ## System
 
@@ -68,15 +68,6 @@ Please:
 | Transfer keep alive | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | `AccountIdLookupOfT`dest<br/>`CompactBalance`amount<br/>                                   |
 | Transfer all        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |                    | `AccountIdLookupOfT`dest<br/>`bool`keep_alive<br/>                                         |
 | Force unreserve     |                    | :heavy_check_mark: | :heavy_check_mark: |                    | `AccountIdLookupOfT`who<br/>`Balance`amount<br/>                                           |
-
-## Sudo
-
-| Name                  | Nano S | Nano S XL | Nano SP/X | Nesting | Arguments                                   |
-| --------------------- | ------ | --------- | --------- | ------- | ------------------------------------------- |
-| Sudo                  |        |           |           |         | `Call`call<br/>                             |
-| Sudo unchecked weight |        |           |           |         | `Call`call<br/>`Weight`weight<br/>          |
-| Set key               |        |           |           |         | `AccountIdLookupOfT`new\_<br/>              |
-| Sudo as               |        |           |           |         | `AccountIdLookupOfT`who<br/>`Call`call<br/> |
 
 ## Democracy
 
@@ -313,6 +304,73 @@ Please:
 | Transfer multiasset with fee |        |           |           |         | `BoxVersionedMultiAsset`asset<br/>`BoxVersionedMultiAsset`fee<br/>`BoxVersionedMultiLocation`dest<br/>`WeightLimit`dest_weight_limit<br/> |
 | Transfer multicurrencies     |        |           |           |         | `VecTupleCurrencyIdBalance`currencies<br/>`u32`fee_item<br/>`BoxVersionedMultiLocation`dest<br/>`WeightLimit`dest_weight_limit<br/>       |
 | Transfer multiassets         |        |           |           |         | `BoxVersionedMultiAssets`assets<br/>`u32`fee_item<br/>`BoxVersionedMultiLocation`dest<br/>`WeightLimit`dest_weight_limit<br/>             |
+
+## Identity
+
+| Name              | Nano S | Nano S XL | Nano SP/X | Nesting | Arguments                                                                                                       |
+| ----------------- | ------ | --------- | --------- | ------- | --------------------------------------------------------------------------------------------------------------- |
+| Add registrar     |        |           |           |         | `AccountIdLookupOfT`account<br/>                                                                                |
+| Set identity      |        |           |           |         | `IdentityInfo`info<br/>                                                                                         |
+| Set subs          |        |           |           |         | `VecTupleAccountIdData`subs<br/>                                                                                |
+| Clear identity    |        |           |           |         |                                                                                                                 |
+| Request judgement |        |           |           |         | `Compactu32`reg_index<br/>`Compactu128`max_fee<br/>                                                             |
+| Cancel request    |        |           |           |         | `RegistrarIndex`reg_index<br/>                                                                                  |
+| Set fee           |        |           |           |         | `Compactu32`index<br/>`Compactu128`fee<br/>                                                                     |
+| Set account id    |        |           |           |         | `Compactu32`index<br/>`AccountIdLookupOfT`new\_<br/>                                                            |
+| Set fields        |        |           |           |         | `Compactu32`index<br/>`IdentityFields`fields<br/>                                                               |
+| Provide judgement |        |           |           |         | `Compactu32`reg_index<br/>`AccountIdLookupOfT`target<br/>`JudgementBalanceOfT`judgement<br/>`Hash`identity<br/> |
+| Kill identity     |        |           |           |         | `AccountIdLookupOfT`target<br/>                                                                                 |
+| Add sub           |        |           |           |         | `AccountIdLookupOfT`sub<br/>`Data`data<br/>                                                                     |
+| Rename sub        |        |           |           |         | `AccountIdLookupOfT`sub<br/>`Data`data<br/>                                                                     |
+| Remove sub        |        |           |           |         | `AccountIdLookupOfT`sub<br/>                                                                                    |
+| Quit sub          |        |           |           |         |                                                                                                                 |
+
+## Contracts
+
+| Name                             | Nano S | Nano S XL | Nano SP/X | Nesting | Arguments                                                                                                                                                       |
+| -------------------------------- | ------ | --------- | --------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Call old weight                  |        |           |           |         | `AccountIdLookupOfT`dest<br/>`CompactBalance`amount<br/>`Compactu64`gas_limit<br/>`OptionCompactBalanceOf`storage_deposit_limit<br/>`Vecu8`data<br/>            |
+| Instantiate with code old weight |        |           |           |         | `CompactBalance`amount<br/>`Compactu64`gas_limit<br/>`OptionCompactBalanceOf`storage_deposit_limit<br/>`Vecu8`code<br/>`Vecu8`data<br/>`Vecu8`salt<br/>         |
+| Instantiate old weight           |        |           |           |         | `CompactBalance`amount<br/>`Compactu64`gas_limit<br/>`OptionCompactBalanceOf`storage_deposit_limit<br/>`CodeHash`code_hash<br/>`Vecu8`data<br/>`Vecu8`salt<br/> |
+| Upload code                      |        |           |           |         | `Vecu8`code<br/>`OptionCompactBalanceOf`storage_deposit_limit<br/>`Determinism`determinism<br/>                                                                 |
+| Remove code                      |        |           |           |         | `CodeHash`code_hash<br/>                                                                                                                                        |
+| Set code                         |        |           |           |         | `AccountIdLookupOfT`dest<br/>`CodeHash`code_hash<br/>                                                                                                           |
+| Call                             |        |           |           |         | `AccountIdLookupOfT`dest<br/>`CompactBalance`amount<br/>`Weight`gas_limit<br/>`OptionCompactBalanceOf`storage_deposit_limit<br/>`Vecu8`data<br/>                |
+| Instantiate with code            |        |           |           |         | `CompactBalance`amount<br/>`Weight`gas_limit<br/>`OptionCompactBalanceOf`storage_deposit_limit<br/>`Vecu8`code<br/>`Vecu8`data<br/>`Vecu8`salt<br/>             |
+| Instantiate                      |        |           |           |         | `CompactBalance`amount<br/>`Weight`gas_limit<br/>`OptionCompactBalanceOf`storage_deposit_limit<br/>`CodeHash`code_hash<br/>`Bytes`data<br/>`Bytes`salt<br/>     |
+
+## DiaOracleModule
+
+| Name                   | Nano S | Nano S XL | Nano SP/X | Nesting | Arguments                                   |
+| ---------------------- | ------ | --------- | --------- | ------- | ------------------------------------------- |
+| Add currency           |        |           |           |         | `Vecu8`blockchain<br/>`Vecu8`symbol<br/>    |
+| Remove currency        |        |           |           |         | `Vecu8`blockchain<br/>`Vecu8`symbol<br/>    |
+| Authorize account      |        |           |           |         | `AccountId`account_id<br/>                  |
+| Deauthorize account    |        |           |           |         | `AccountId`account_id<br/>                  |
+| Set updated coin infos |        |           |           |         | `VecTupleVecu8Vecu8CoinInfo`coin_infos<br/> |
+| Set batching api       |        |           |           |         | `Vecu8`api<br/>                             |
+
+## ZenlinkProtocol
+
+| Name                         | Nano S | Nano S XL | Nano SP/X | Nesting | Arguments                                                                                                                                                                                                                                                              |
+| ---------------------------- | ------ | --------- | --------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Set fee receiver             |        |           |           |         | `OptionLookupasStaticLookupSource`send_to<br/>                                                                                                                                                                                                                         |
+| Set fee point                |        |           |           |         | `u8`fee_point<br/>                                                                                                                                                                                                                                                     |
+| Transfer                     |        |           |           |         | `AssetId`asset_id<br/>`LookupasStaticLookupSource`recipient<br/>`Compactu128`amount<br/>                                                                                                                                                                               |
+| Transfer to parachain        |        |           |           |         | `AssetId`asset_id<br/>`ParaId`para_id<br/>`AccountId`recipient<br/>`Compactu128`amount<br/>`u64`max_weight<br/>                                                                                                                                                        |
+| Create pair                  |        |           |           |         | `AssetId`asset_0<br/>`AssetId`asset_1<br/>                                                                                                                                                                                                                             |
+| Add liquidity                |        |           |           |         | `AssetId`asset_0<br/>`AssetId`asset_1<br/>`Compactu128`amount_0_desired<br/>`Compactu128`amount_1_desired<br/>`Compactu128`amount_0_min<br/>`Compactu128`amount_1_min<br/>`Compactu32`deadline<br/>                                                                    |
+| Remove liquidity             |        |           |           |         | `AssetId`asset_0<br/>`AssetId`asset_1<br/>`Compactu128`liquidity<br/>`Compactu128`amount_0_min<br/>`Compactu128`amount_1_min<br/>`LookupasStaticLookupSource`recipient<br/>`Compactu32`deadline<br/>                                                                   |
+| Swap exact assets for assets |        |           |           |         | `Compactu128`amount_in<br/>`Compactu128`amount_out_min<br/>`VecAssetId`path<br/>`LookupasStaticLookupSource`recipient<br/>`Compactu32`deadline<br/>                                                                                                                    |
+| Swap assets for exact assets |        |           |           |         | `Compactu128`amount_out<br/>`Compactu128`amount_in_max<br/>`VecAssetId`path<br/>`LookupasStaticLookupSource`recipient<br/>`Compactu32`deadline<br/>                                                                                                                    |
+| Bootstrap create             |        |           |           |         | `AssetId`asset_0<br/>`AssetId`asset_1<br/>`Compactu128`target_supply_0<br/>`Compactu128`target_supply_1<br/>`Compactu128`capacity_supply_0<br/>`Compactu128`capacity_supply_1<br/>`Compactu32`end<br/>`VecAssetId`rewards<br/>`VecTupleAssetIdAssetBalance`limits<br/> |
+| Bootstrap contribute         |        |           |           |         | `AssetId`asset_0<br/>`AssetId`asset_1<br/>`Compactu128`amount_0_contribute<br/>`Compactu128`amount_1_contribute<br/>`Compactu32`deadline<br/>                                                                                                                          |
+| Bootstrap claim              |        |           |           |         | `LookupasStaticLookupSource`recipient<br/>`AssetId`asset_0<br/>`AssetId`asset_1<br/>`Compactu32`deadline<br/>                                                                                                                                                          |
+| Bootstrap end                |        |           |           |         | `AssetId`asset_0<br/>`AssetId`asset_1<br/>                                                                                                                                                                                                                             |
+| Bootstrap update             |        |           |           |         | `AssetId`asset_0<br/>`AssetId`asset_1<br/>`Compactu128`target_supply_0<br/>`Compactu128`target_supply_1<br/>`Compactu128`capacity_supply_0<br/>`Compactu128`capacity_supply_1<br/>`Compactu32`end<br/>`VecAssetId`rewards<br/>`VecTupleAssetIdAssetBalance`limits<br/> |
+| Bootstrap refund             |        |           |           |         | `AssetId`asset_0<br/>`AssetId`asset_1<br/>                                                                                                                                                                                                                             |
+| Bootstrap charge reward      |        |           |           |         | `AssetId`asset_0<br/>`AssetId`asset_1<br/>`VecTupleAssetIdAssetBalance`charge_rewards<br/>                                                                                                                                                                             |
+| Bootstrap withdraw reward    |        |           |           |         | `AssetId`asset_0<br/>`AssetId`asset_1<br/>`LookupasStaticLookupSource`recipient<br/>                                                                                                                                                                                   |
 
 ## VestingManager
 
