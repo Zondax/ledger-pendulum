@@ -30,6 +30,7 @@
 #include "coin.h"
 #include "zxmacros.h"
 #include "app_mode.h"
+#include "view.h"
 
 static bool tx_initialized = false;
 
@@ -92,17 +93,15 @@ __Z_INLINE bool process_chunk(__Z_UNUSED volatile uint32_t *tx, uint32_t rx) {
             added = tx_append(&(G_io_apdu_buffer[OFFSET_DATA]), rx - OFFSET_DATA);
             tx_initialized = false;
             if (added != rx - OFFSET_DATA) {
-                tx_initialized = false;
                 THROW(APDU_CODE_OUTPUT_BUFFER_TOO_SMALL);
             }
-            tx_initialized = false;
             return true;
     }
 
     THROW(APDU_CODE_INVALIDP1P2);
 }
 
-__Z_INLINE void handle_getversion(volatile uint32_t *flags, volatile uint32_t *tx) {
+__Z_INLINE void handle_getversion(__Z_UNUSED volatile uint32_t *flags, volatile uint32_t *tx) {
     G_io_apdu_buffer[0] = 0;
 
 #if defined(APP_TESTING)
@@ -143,7 +142,7 @@ __Z_INLINE void handleGetAddr(volatile uint32_t *flags, volatile uint32_t *tx, u
     }
     if (requireConfirmation) {
         view_review_init(addr_getItem, addr_getNumItems, app_reply_address);
-        view_review_show(0x03);
+        view_review_show(REVIEW_ADDRESS);
         *flags |= IO_ASYNCH_REPLY;
         return;
     }
@@ -226,7 +225,7 @@ void handleTest(volatile uint32_t *flags, volatile uint32_t *tx, uint32_t rx) {
 #endif
 
 void handleApdu(volatile uint32_t *flags, volatile uint32_t *tx, uint32_t rx) {
-    uint16_t sw = 0;
+    volatile uint16_t sw = 0;
 
     BEGIN_TRY
     {
@@ -247,17 +246,13 @@ void handleApdu(volatile uint32_t *flags, volatile uint32_t *tx, uint32_t rx) {
                 }
 
                 case INS_GET_ADDR: {
-                    if( os_global_pin_is_validated() != BOLOS_UX_OK ) {
-                        THROW(APDU_CODE_COMMAND_NOT_ALLOWED);
-                    }
+                    CHECK_PIN_VALIDATED()
                     handleGetAddr(flags, tx, rx);
                     break;
                 }
 
                 case INS_SIGN: {
-                    if( os_global_pin_is_validated() != BOLOS_UX_OK ) {
-                        THROW(APDU_CODE_COMMAND_NOT_ALLOWED);
-                    }
+                    CHECK_PIN_VALIDATED()
                     handleSign(flags, tx, rx);
                     break;
                 }
@@ -289,7 +284,7 @@ void handleApdu(volatile uint32_t *flags, volatile uint32_t *tx, uint32_t rx) {
                     break;
             }
             G_io_apdu_buffer[*tx] = sw >> 8;
-            G_io_apdu_buffer[*tx + 1] = sw;
+            G_io_apdu_buffer[*tx + 1] = sw & 0xFF;
             *tx += 2;
         }
         FINALLY
