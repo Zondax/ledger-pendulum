@@ -14,18 +14,28 @@
  *  limitations under the License.
  ******************************************************************************* */
 
-import Zemu from '@zondax/zemu'
+import Zemu, { DEFAULT_START_OPTIONS } from '@zondax/zemu'
 import { newSubstrateApp } from '@zondax/ledger-substrate'
-import { txBalances_transfer } from './zemu_blobs'
+import { APP_SEED } from './common'
 
 // @ts-ignore
 import { blake2bFinal, blake2bInit, blake2bUpdate } from 'blakejs'
-import { defaultOptions } from './common'
+import { txBalances_transfer } from './zemu_blobs'
 
 const addon = require('../../tests_tools/neon/native')
 
 const Resolve = require('path').resolve
 const APP_PATH = Resolve('../app/output/app_sr25519.elf')
+
+const defaultOptions = {
+  ...DEFAULT_START_OPTIONS,
+  logging: true,
+  custom: `-s "${APP_SEED}"`,
+  X11: false,
+}
+
+const expected_address = '6bg5NGn8AHiqSqkUou69rjGxGdo1FS3wytUASEzMXcJXKKBA'
+const expected_pk = '1a08e8cba45e59c761ebe72133da0b7f4de8ce6a263690b07e3bd56dcc8d2226'
 
 jest.setTimeout(180000)
 
@@ -42,9 +52,6 @@ describe('SR25519', function () {
 
       expect(resp.return_code).toEqual(0x9000)
       expect(resp.error_message).toEqual('No errors')
-
-      const expected_address = '6bg5NGn8AHiqSqkUou69rjGxGdo1FS3wytUASEzMXcJXKKBA'
-      const expected_pk = '1a08e8cba45e59c761ebe72133da0b7f4de8ce6a263690b07e3bd56dcc8d2226'
 
       expect(resp.address).toEqual(expected_address)
       expect(resp.pubKey).toEqual(expected_pk)
@@ -69,9 +76,6 @@ describe('SR25519', function () {
 
       expect(resp.return_code).toEqual(0x9000)
       expect(resp.error_message).toEqual('No errors')
-
-      const expected_address = '6bg5NGn8AHiqSqkUou69rjGxGdo1FS3wytUASEzMXcJXKKBA'
-      const expected_pk = '1a08e8cba45e59c761ebe72133da0b7f4de8ce6a263690b07e3bd56dcc8d2226'
 
       expect(resp.address).toEqual(expected_address)
       expect(resp.pubKey).toEqual(expected_pk)
@@ -135,7 +139,7 @@ describe('SR25519', function () {
         prehash = Buffer.from(blake2bFinal(context))
       }
       const signingcontext = Buffer.from([])
-      const valid = addon.schnorrkel_verify(pubKey, signingcontext, prehash, signatureResponse.signature.slice(1))
+      const valid = addon.schnorrkel_verify(pubKey, signingcontext, prehash, signatureResponse.signature.subarray(1))
       expect(valid).toEqual(true)
     } finally {
       await sim.close()
@@ -182,7 +186,7 @@ describe('SR25519', function () {
         prehash = Buffer.from(blake2bFinal(context))
       }
       const signingcontext = Buffer.from([])
-      const valid = addon.schnorrkel_verify(pubKey, signingcontext, prehash, signatureResponse.signature.slice(1))
+      const valid = addon.schnorrkel_verify(pubKey, signingcontext, prehash, signatureResponse.signature.subarray(1))
       expect(valid).toEqual(true)
     } finally {
       await sim.close()
@@ -234,7 +238,7 @@ describe('SR25519', function () {
         prehash = Buffer.from(blake2bFinal(context))
       }
       const signingcontext = Buffer.from([])
-      const valid = addon.schnorrkel_verify(pubKey, signingcontext, prehash, signatureResponse.signature.slice(1))
+      const valid = addon.schnorrkel_verify(pubKey, signingcontext, prehash, signatureResponse.signature.subarray(1))
       expect(valid).toEqual(true)
     } finally {
       await sim.close()

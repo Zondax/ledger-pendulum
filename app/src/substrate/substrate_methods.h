@@ -13,11 +13,12 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  ********************************************************************************/
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wextern-c-compat"
 #pragma once
 
 #ifdef __cplusplus
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wextern-c-compat"
+
 extern "C" {
 #endif
 
@@ -26,15 +27,15 @@ extern "C" {
 
 #define GET_PD_CALL(CALL, VERSION) (PD_CALL_##CALL##_V##VERSION)
 
-#include "substrate_methods_V4.h"
-#include "substrate_types_V4.h"
+#include "substrate_methods_V8.h"
+#include "substrate_types_V8.h"
 
 typedef union {
-    pd_Method_V4_t V4;
+    pd_Method_V8_t V8;
 } pd_Method_t;
 
 typedef union {
-    pd_MethodNested_V4_t V4;
+    pd_MethodNested_V8_t V8;
 } pd_MethodNested_t;
 
 #ifdef __cplusplus
