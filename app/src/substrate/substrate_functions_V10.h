@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  (c) 2019 - 2023 Zondax AG
+ *  (c) 2019 - 2024 Zondax AG
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,11 +19,13 @@
 extern "C" {
 #endif
 
-#include "substrate_types.h"
+#include "parser_common.h"
+#include "substrate_methods_V10.h"
+#include "substrate_types_V10.h"
 #include <stddef.h>
 #include <stdint.h>
 
-// Versioned types functions for tx version V8
+// Versioned types functions for tx version V10
 
 #ifdef __cplusplus
 }

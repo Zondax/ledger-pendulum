@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  (c) 2019 - 2023 Zondax AG
+ *  (c) 2019 - 2024 Zondax AG
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,88 +23,88 @@ extern "C" {
 #endif
 
 #include "substrate_types.h"
-#include "substrate_types_V8.h"
+#include "substrate_types_V10.h"
 #include <stddef.h>
 #include <stdint.h>
 #ifdef LEDGER_SPECIFIC
 #include "bolos_target.h"
 #endif
 
-#define PD_CALL_BALANCES_V8 10
-
-#define PD_CALL_BALANCES_TRANSFER_ALL_V8 4
-typedef struct {
-    pd_AccountIdLookupOfT_t dest;
-    pd_bool_t keep_alive;
-} pd_balances_transfer_all_V8_t;
+#define PD_CALL_BALANCES_V10 10
 
 #ifdef SUBSTRATE_PARSER_FULL
 #ifndef TARGET_NANOS
 #endif
 
-#define PD_CALL_BALANCES_FORCE_UNRESERVE_V8 5
+#define PD_CALL_BALANCES_FORCE_UNRESERVE_V10 5
 typedef struct {
     pd_AccountIdLookupOfT_t who;
     pd_Balance_t amount;
-} pd_balances_force_unreserve_V8_t;
+} pd_balances_force_unreserve_V10_t;
 
 #endif
 
 typedef union {
-    pd_balances_transfer_all_V8_t balances_transfer_all_V8;
 #ifdef SUBSTRATE_PARSER_FULL
 #ifndef TARGET_NANOS
 #endif
-    pd_balances_force_unreserve_V8_t balances_force_unreserve_V8;
+    pd_balances_force_unreserve_V10_t balances_force_unreserve_V10;
 #endif
-} pd_MethodBasic_V8_t;
+} pd_MethodBasic_V10_t;
 
-#define PD_CALL_BALANCES_TRANSFER_V8 0
+#define PD_CALL_BALANCES_TRANSFER_V10 0
 typedef struct {
     pd_AccountIdLookupOfT_t dest;
     pd_CompactBalance_t amount;
-} pd_balances_transfer_V8_t;
+} pd_balances_transfer_V10_t;
 
-#define PD_CALL_BALANCES_FORCE_TRANSFER_V8 2
+#define PD_CALL_BALANCES_FORCE_TRANSFER_V10 2
 typedef struct {
     pd_AccountIdLookupOfT_t source;
     pd_AccountIdLookupOfT_t dest;
     pd_CompactBalance_t amount;
-} pd_balances_force_transfer_V8_t;
+} pd_balances_force_transfer_V10_t;
 
-#define PD_CALL_BALANCES_TRANSFER_KEEP_ALIVE_V8 3
+#define PD_CALL_BALANCES_TRANSFER_KEEP_ALIVE_V10 3
 typedef struct {
     pd_AccountIdLookupOfT_t dest;
     pd_CompactBalance_t amount;
-} pd_balances_transfer_keep_alive_V8_t;
+} pd_balances_transfer_keep_alive_V10_t;
+
+#define PD_CALL_BALANCES_TRANSFER_ALL_V10 4
+typedef struct {
+    pd_AccountIdLookupOfT_t dest;
+    pd_bool_t keep_alive;
+} pd_balances_transfer_all_V10_t;
 
 #ifdef SUBSTRATE_PARSER_FULL
 #ifndef TARGET_NANOS
 #endif
-#define PD_CALL_BALANCES_SET_BALANCE_V8 1
+#define PD_CALL_BALANCES_SET_BALANCE_V10 1
 typedef struct {
     pd_AccountIdLookupOfT_t who;
     pd_CompactBalance_t new_free;
     pd_CompactBalance_t new_reserved;
-} pd_balances_set_balance_V8_t;
+} pd_balances_set_balance_V10_t;
 
 #endif
 
 typedef union {
-    pd_balances_transfer_V8_t balances_transfer_V8;
-    pd_balances_force_transfer_V8_t balances_force_transfer_V8;
-    pd_balances_transfer_keep_alive_V8_t balances_transfer_keep_alive_V8;
+    pd_balances_transfer_V10_t balances_transfer_V10;
+    pd_balances_force_transfer_V10_t balances_force_transfer_V10;
+    pd_balances_transfer_keep_alive_V10_t balances_transfer_keep_alive_V10;
+    pd_balances_transfer_all_V10_t balances_transfer_all_V10;
 #ifdef SUBSTRATE_PARSER_FULL
 #ifndef TARGET_NANOS
 #endif
-    pd_balances_set_balance_V8_t balances_set_balance_V8;
+    pd_balances_set_balance_V10_t balances_set_balance_V10;
 #endif
-} pd_MethodNested_V8_t;
+} pd_MethodNested_V10_t;
 
 typedef union {
-    pd_MethodBasic_V8_t basic;
-    pd_MethodNested_V8_t nested;
-} pd_Method_V8_t;
+    pd_MethodBasic_V10_t basic;
+    pd_MethodNested_V10_t nested;
+} pd_Method_V10_t;
 
 #ifdef __cplusplus
 }
