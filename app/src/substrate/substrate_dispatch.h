@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  (c) 2019 - 2023 Zondax AG
+ *  (c) 2019 - 2024 Zondax AG
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ extern "C" {
 
 #include "parser_common.h"
 #include "stdbool.h"
-#include "substrate_dispatch_V8.h"
+#include "substrate_dispatch_V10.h"
 #include <stddef.h>
 #include <stdint.h>
 
@@ -32,8 +32,8 @@ extern "C" {
     {                                              \
         switch (txVersion) {                       \
                                                    \
-        case 8:                                    \
-            return PD_CALL_##CALL##_V8;            \
+        case 10:                                   \
+            return PD_CALL_##CALL##_V10;           \
                                                    \
         default:                                   \
             return 0;                              \

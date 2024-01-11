@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  (c) 2019 - 2023 Zondax AG
+ *  (c) 2019 - 2024 Zondax AG
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -427,7 +427,7 @@ parser_error_t _toStringCall(
 
     pageIdx--;
 
-    if (pageIdx > *pageCount) {
+    if (pageIdx >= *pageCount) {
         return parser_display_idx_out_of_range;
     }
 
