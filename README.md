@@ -28,7 +28,7 @@ Please:
 - **Do not use in production**
 - **Do not use a Ledger device with funds for development purposes.**
 - **Have a separate and marked device that is used ONLY for development and testing**
-# Pendulum 8.8.x
+# Pendulum 10.10.x
 
 ## System
 
@@ -45,12 +45,12 @@ Please:
 
 ## ParachainSystem
 
-| Name                     | Nano S | Nano S XL | Nano SP/X - Stax | Nesting | Arguments                        |
-| ------------------------ | ------ | --------- | ---------------- | ------- | -------------------------------- |
-| Set validation data      |        |           |                  |         | `ParachainInherentData`data<br/> |
-| Sudo send upward message |        |           |                  |         | `UpwardMessage`message<br/>      |
-| Authorize upgrade        |        |           |                  |         | `Hash`code_hash<br/>             |
-| Enact authorized upgrade |        |           |                  |         | `Vecu8`code<br/>                 |
+| Name                     | Nano S | Nano S XL | Nano SP/X - Stax | Nesting | Arguments                                    |
+| ------------------------ | ------ | --------- | ---------------- | ------- | -------------------------------------------- |
+| Set validation data      |        |           |                  |         | `ParachainInherentData`data<br/>             |
+| Sudo send upward message |        |           |                  |         | `UpwardMessage`message<br/>                  |
+| Authorize upgrade        |        |           |                  |         | `Hash`code_hash<br/>`bool`check_version<br/> |
+| Enact authorized upgrade |        |           |                  |         | `Vecu8`code<br/>                             |
 
 ## Timestamp
 
@@ -66,7 +66,7 @@ Please:
 | Set balance         |                    | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | `AccountIdLookupOfT`who<br/>`CompactBalance`new_free<br/>`CompactBalance`new_reserved<br/> |
 | Force transfer      | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | `AccountIdLookupOfT`source<br/>`AccountIdLookupOfT`dest<br/>`CompactBalance`amount<br/>    |
 | Transfer keep alive | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | `AccountIdLookupOfT`dest<br/>`CompactBalance`amount<br/>                                   |
-| Transfer all        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |                    | `AccountIdLookupOfT`dest<br/>`bool`keep_alive<br/>                                         |
+| Transfer all        | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | `AccountIdLookupOfT`dest<br/>`bool`keep_alive<br/>                                         |
 | Force unreserve     |                    | :heavy_check_mark: | :heavy_check_mark: |                    | `AccountIdLookupOfT`who<br/>`Balance`amount<br/>                                           |
 
 ## Democracy
@@ -91,6 +91,7 @@ Please:
 | Remove other vote         |        |           |                  |         | `AccountIdLookupOfT`target<br/>`ReferendumIndex`index<br/>                     |
 | Blacklist                 |        |           |                  |         | `H256`proposal_hash<br/>`OptionReferendumIndex`maybe_ref_index<br/>            |
 | Cancel proposal           |        |           |                  |         | `Compactu32`prop_index<br/>                                                    |
+| Set metadata              |        |           |                  |         | `MetadataOwner`owner<br/>`OptionPreimageHash`maybe_hash<br/>                   |
 
 ## Council
 
@@ -181,11 +182,20 @@ Please:
 | Claim child bounty |        |           |                  |         | `Compactu32`parent_bounty_id<br/>`Compactu32`child_bounty_id<br/>                                                         |
 | Close child bounty |        |           |                  |         | `Compactu32`parent_bounty_id<br/>`Compactu32`child_bounty_id<br/>                                                         |
 
-## Authorship
+## Proxy
 
-| Name       | Nano S | Nano S XL | Nano SP/X - Stax | Nesting | Arguments                  |
-| ---------- | ------ | --------- | ---------------- | ------- | -------------------------- |
-| Set uncles |        |           |                  |         | `VecHeader`new_uncles<br/> |
+| Name                | Nano S | Nano S XL | Nano SP/X - Stax | Nesting | Arguments                                                                                                                  |
+| ------------------- | ------ | --------- | ---------------- | ------- | -------------------------------------------------------------------------------------------------------------------------- |
+| Proxy               |        |           |                  |         | `AccountIdLookupOfT`real<br/>`OptionProxyType`force_proxy_type<br/>`Call`call<br/>                                         |
+| Add proxy           |        |           |                  |         | `AccountIdLookupOfT`delegate<br/>`ProxyType`proxy_type<br/>`BlockNumber`delay<br/>                                         |
+| Remove proxy        |        |           |                  |         | `AccountIdLookupOfT`delegate<br/>`ProxyType`proxy_type<br/>`BlockNumber`delay<br/>                                         |
+| Remove proxies      |        |           |                  |         |                                                                                                                            |
+| Create pure         |        |           |                  |         | `ProxyType`proxy_type<br/>`BlockNumber`delay<br/>`u16`index<br/>                                                           |
+| Kill pure           |        |           |                  |         | `AccountIdLookupOfT`spawner<br/>`ProxyType`proxy_type<br/>`u16`index<br/>`Compactu32`height<br/>`Compactu32`ext_index<br/> |
+| Announce            |        |           |                  |         | `AccountIdLookupOfT`real<br/>`CallHashOf`call_hash<br/>                                                                    |
+| Remove announcement |        |           |                  |         | `AccountIdLookupOfT`real<br/>`CallHashOf`call_hash<br/>                                                                    |
+| Reject announcement |        |           |                  |         | `AccountIdLookupOfT`delegate<br/>`CallHashOf`call_hash<br/>                                                                |
+| Proxy announced     |        |           |                  |         | `AccountIdLookupOfT`delegate<br/>`AccountIdLookupOfT`real<br/>`OptionProxyType`force_proxy_type<br/>`Call`call<br/>        |
 
 ## Session
 
@@ -222,17 +232,17 @@ Please:
 
 ## XcmpQueue
 
-| Name                              | Nano S | Nano S XL | Nano SP/X - Stax | Nesting | Arguments                                               |
-| --------------------------------- | ------ | --------- | ---------------- | ------- | ------------------------------------------------------- |
-| Service overweight                |        |           |                  |         | `OverweightIndex`index<br/>`XcmWeight`weight_limit<br/> |
-| Suspend xcm execution             |        |           |                  |         |                                                         |
-| Resume xcm execution              |        |           |                  |         |                                                         |
-| Update suspend threshold          |        |           |                  |         | `u32`new\_<br/>                                         |
-| Update drop threshold             |        |           |                  |         | `u32`new\_<br/>                                         |
-| Update resume threshold           |        |           |                  |         | `u32`new\_<br/>                                         |
-| Update threshold weight           |        |           |                  |         | `XcmWeight`new\_<br/>                                   |
-| Update weight restrict decay      |        |           |                  |         | `XcmWeight`new\_<br/>                                   |
-| Update xcmp max individual weight |        |           |                  |         | `XcmWeight`new\_<br/>                                   |
+| Name                              | Nano S | Nano S XL | Nano SP/X - Stax | Nesting | Arguments                                            |
+| --------------------------------- | ------ | --------- | ---------------- | ------- | ---------------------------------------------------- |
+| Service overweight                |        |           |                  |         | `OverweightIndex`index<br/>`Weight`weight_limit<br/> |
+| Suspend xcm execution             |        |           |                  |         |                                                      |
+| Resume xcm execution              |        |           |                  |         |                                                      |
+| Update suspend threshold          |        |           |                  |         | `u32`new\_<br/>                                      |
+| Update drop threshold             |        |           |                  |         | `u32`new\_<br/>                                      |
+| Update resume threshold           |        |           |                  |         | `u32`new\_<br/>                                      |
+| Update threshold weight           |        |           |                  |         | `Weight`new\_<br/>                                   |
+| Update weight restrict decay      |        |           |                  |         | `Weight`new\_<br/>                                   |
+| Update xcmp max individual weight |        |           |                  |         | `Weight`new\_<br/>                                   |
 
 ## PolkadotXcm
 
@@ -241,7 +251,7 @@ Please:
 | Send                             |        |           |                  |         | `BoxVersionedMultiLocation`dest<br/>`BoxVersionedXcmTuple`message<br/>                                                                                                    |
 | Teleport assets                  |        |           |                  |         | `BoxVersionedMultiLocation`dest<br/>`BoxVersionedMultiLocation`beneficiary<br/>`BoxVersionedMultiAssets`assets<br/>`u32`fee_asset_item<br/>                               |
 | Reserve transfer assets          |        |           |                  |         | `BoxVersionedMultiLocation`dest<br/>`BoxVersionedMultiLocation`beneficiary<br/>`BoxVersionedMultiAssets`assets<br/>`u32`fee_asset_item<br/>                               |
-| Execute                          |        |           |                  |         | `BoxVersionedXcmTasSysConfigRuntimeCall`message<br/>`XcmWeight`max_weight<br/>                                                                                            |
+| Execute                          |        |           |                  |         | `BoxVersionedXcmTasSysConfigRuntimeCall`message<br/>`Weight`max_weight<br/>                                                                                               |
 | Force xcm version                |        |           |                  |         | `BoxMultiLocation`location<br/>`XcmVersion`xcm_version<br/>                                                                                                               |
 | Force default xcm version        |        |           |                  |         | `OptionXcmVersion`maybe_xcm_version<br/>                                                                                                                                  |
 | Force subscribe version notify   |        |           |                  |         | `BoxVersionedMultiLocation`location<br/>                                                                                                                                  |
@@ -251,9 +261,9 @@ Please:
 
 ## DmpQueue
 
-| Name               | Nano S | Nano S XL | Nano SP/X - Stax | Nesting | Arguments                                               |
-| ------------------ | ------ | --------- | ---------------- | ------- | ------------------------------------------------------- |
-| Service overweight |        |           |                  |         | `OverweightIndex`index<br/>`XcmWeight`weight_limit<br/> |
+| Name               | Nano S | Nano S XL | Nano SP/X - Stax | Nesting | Arguments                                            |
+| ------------------ | ------ | --------- | ---------------- | ------- | ---------------------------------------------------- |
+| Service overweight |        |           |                  |         | `OverweightIndex`index<br/>`Weight`weight_limit<br/> |
 
 ## Vesting
 
@@ -357,7 +367,6 @@ Please:
 | Set fee receiver             |        |           |                  |         | `OptionLookupasStaticLookupSource`send_to<br/>                                                                                                                                                                                                                         |
 | Set fee point                |        |           |                  |         | `u8`fee_point<br/>                                                                                                                                                                                                                                                     |
 | Transfer                     |        |           |                  |         | `AssetId`asset_id<br/>`LookupasStaticLookupSource`recipient<br/>`Compactu128`amount<br/>                                                                                                                                                                               |
-| Transfer to parachain        |        |           |                  |         | `AssetId`asset_id<br/>`ParaId`para_id<br/>`AccountId`recipient<br/>`Compactu128`amount<br/>`u64`max_weight<br/>                                                                                                                                                        |
 | Create pair                  |        |           |                  |         | `AssetId`asset_0<br/>`AssetId`asset_1<br/>                                                                                                                                                                                                                             |
 | Add liquidity                |        |           |                  |         | `AssetId`asset_0<br/>`AssetId`asset_1<br/>`Compactu128`amount_0_desired<br/>`Compactu128`amount_1_desired<br/>`Compactu128`amount_0_min<br/>`Compactu128`amount_1_min<br/>`Compactu32`deadline<br/>                                                                    |
 | Remove liquidity             |        |           |                  |         | `AssetId`asset_0<br/>`AssetId`asset_1<br/>`Compactu128`liquidity<br/>`Compactu128`amount_0_min<br/>`Compactu128`amount_1_min<br/>`LookupasStaticLookupSource`recipient<br/>`Compactu32`deadline<br/>                                                                   |
@@ -371,6 +380,32 @@ Please:
 | Bootstrap refund             |        |           |                  |         | `AssetId`asset_0<br/>`AssetId`asset_1<br/>                                                                                                                                                                                                                             |
 | Bootstrap charge reward      |        |           |                  |         | `AssetId`asset_0<br/>`AssetId`asset_1<br/>`VecTupleAssetIdAssetBalance`charge_rewards<br/>                                                                                                                                                                             |
 | Bootstrap withdraw reward    |        |           |                  |         | `AssetId`asset_0<br/>`AssetId`asset_1<br/>`LookupasStaticLookupSource`recipient<br/>                                                                                                                                                                                   |
+
+## Farming
+
+| Name                | Nano S | Nano S XL | Nano SP/X - Stax | Nesting | Arguments                                                                                                                                                                                                                                                                                                                                                        |
+| ------------------- | ------ | --------- | ---------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Create farming pool |        |           |                  |         | `VecTupleCurrencyIdOfTPerbill`tokens_proportion<br/>`VecTupleCurrencyIdOfTBalanceOfT`basic_rewards<br/>`OptionCurrencyIdOfTBlockNumberForTVecCurrencyIdOfTBalanceOfT`gauge_init<br/>`Balance`min_deposit_to_start<br/>`Compactu32`after_block_to_start<br/>`Compactu32`withdraw_limit_time<br/>`Compactu32`claim_limit_time<br/>`u8`withdraw_limit_count<br/>    |
+| Charge              |        |           |                  |         | `PoolId`pid<br/>`VecTupleCurrencyIdOfTBalanceOfT`rewards<br/>                                                                                                                                                                                                                                                                                                    |
+| Deposit             |        |           |                  |         | `PoolId`pid<br/>`Balance`add_value<br/>`OptionTupleBalanceOfTBlockNumber`gauge_info<br/>                                                                                                                                                                                                                                                                         |
+| Withdraw            |        |           |                  |         | `PoolId`pid<br/>`OptionBalance`remove_value<br/>                                                                                                                                                                                                                                                                                                                 |
+| Claim               |        |           |                  |         | `PoolId`pid<br/>                                                                                                                                                                                                                                                                                                                                                 |
+| Withdraw claim      |        |           |                  |         | `PoolId`pid<br/>                                                                                                                                                                                                                                                                                                                                                 |
+| Force retire pool   |        |           |                  |         | `PoolId`pid<br/>                                                                                                                                                                                                                                                                                                                                                 |
+| Set retire limit    |        |           |                  |         | `u32`limit<br/>                                                                                                                                                                                                                                                                                                                                                  |
+| Close pool          |        |           |                  |         | `PoolId`pid<br/>                                                                                                                                                                                                                                                                                                                                                 |
+| Reset pool          |        |           |                  |         | `PoolId`pid<br/>`OptionVecTupleCurrencyIdOfTBalanceOfT`basic_rewards<br/>`OptionBalance`min_deposit_to_start<br/>`OptionBlockNumber`after_block_to_start<br/>`OptionBlockNumber`withdraw_limit_time<br/>`OptionBlockNumber`claim_limit_time<br/>`Optionu8`withdraw_limit_count<br/>`OptionCurrencyIdOfTBlockNumberForTVecCurrencyIdOfTBalanceOfT`gauge_init<br/> |
+| Kill pool           |        |           |                  |         | `PoolId`pid<br/>                                                                                                                                                                                                                                                                                                                                                 |
+| Edit pool           |        |           |                  |         | `PoolId`pid<br/>`OptionVecTupleCurrencyIdOfTBalanceOfT`basic_rewards<br/>`OptionBlockNumber`withdraw_limit_time<br/>`OptionBlockNumber`claim_limit_time<br/>`OptionVecTupleCurrencyIdOfTBalanceOfT`gauge_basic_rewards<br/>`Optionu8`withdraw_limit_count<br/>                                                                                                   |
+| Gauge withdraw      |        |           |                  |         | `PoolId`gid<br/>                                                                                                                                                                                                                                                                                                                                                 |
+| Force gauge claim   |        |           |                  |         | `PoolId`gid<br/>                                                                                                                                                                                                                                                                                                                                                 |
+
+## AssetRegistry
+
+| Name           | Nano S | Nano S XL | Nano SP/X - Stax | Nesting | Arguments                                                                                                                                                                                                                 |
+| -------------- | ------ | --------- | ---------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Register asset |        |           |                  |         | `AssetMetadataBalanceCustomMetadata`metadata<br/>`OptionAssetId`asset_id<br/>                                                                                                                                             |
+| Update asset   |        |           |                  |         | `AssetId`asset_id<br/>`Optionu32`decimals<br/>`OptionVecu8`name<br/>`OptionVecu8`symbol<br/>`OptionBalance`existential_deposit<br/>`OptionOptionVersionedMultiLocation`location<br/>`OptionCustomMetadata`additional<br/> |
 
 ## VestingManager
 
