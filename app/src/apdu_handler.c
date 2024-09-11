@@ -61,6 +61,7 @@ __Z_INLINE bool process_chunk(__Z_UNUSED volatile uint32_t *tx, uint32_t rx) {
     const uint8_t payloadType = G_io_apdu_buffer[OFFSET_PAYLOAD_TYPE];
 #ifndef SUPPORT_SR25519
     if (G_io_apdu_buffer[OFFSET_P2] != 0) {
+        zemu_log("process_chunk: P2 is not 0\n");
         THROW(APDU_CODE_INVALIDP1P2);
     }
 #endif
@@ -162,6 +163,8 @@ __Z_INLINE void handleSign(volatile uint32_t *flags, volatile uint32_t *tx, uint
     }
     const uint8_t addr_type = G_io_apdu_buffer[OFFSET_P2];
     const key_kind_e key_type = get_key_type(addr_type);
+
+    ZEMU_LOGF(40, "key_type: %d\n", (int)key_type);
 
     *tx = 0;
     const char *error_msg = tx_parse();

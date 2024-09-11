@@ -27,8 +27,9 @@ ifeq ($(BOLOS_SDK),)
 
 ZXLIB_COMPILE_STAX ?= 1
 SUBSTRATE_PARSER_FULL ?= 1
-include $(CURDIR)/deps/ledger-zxlib/dockerized_build.mk
+PRODUCTION_BUILD ?= 1
 
+include $(CURDIR)/deps/ledger-zxlib/dockerized_build.mk
 else
 default:
 	$(MAKE) -C app
@@ -47,6 +48,11 @@ zemu_install: tests_tools_build
 
 test_all:
 	make zemu_install
-	SUBSTRATE_PARSER_FULL=1 make
-	SUBSTRATE_PARSER_FULL=1 SUPPORT_SR25519=1 make buildS
+	make clean
+	APP_TESTING=1 SUBSTRATE_PARSER_FULL=1 PRODUCTION_BUILD=1 make buildX
+	APP_TESTING=1 SUBSTRATE_PARSER_FULL=1 PRODUCTION_BUILD=1 make buildS2
+	APP_TESTING=1 SUBSTRATE_PARSER_FULL=1 PRODUCTION_BUILD=1 make buildST
+	APP_TESTING=1 SUBSTRATE_PARSER_FULL=1 PRODUCTION_BUILD=1 make buildFL
+	APP_TESTING=1 SUBSTRATE_PARSER_FULL=1 SUPPORT_SR25519=1 PRODUCTION_BUILD=1 make buildS
+	APP_TESTING=1 SUBSTRATE_PARSER_FULL=1 PRODUCTION_BUILD=1 make buildS
 	make zemu_test
